@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOREL International Restaurant</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/favicon/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="assets/favicon/site.webmanifest">
+    <meta name="theme-color" content="#D62828">
+    
+    <link rel="stylesheet" href="styles.css">
+    <!-- Update Font Awesome to latest version -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        .loading {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        #hero {
+        position: relative;
+        overflow: hidden;
+        height: 100vh;
+    }
+
+    .hero-slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 600%;
+        height: 100%;
+        display: flex;
+        animation: slideShow 22s infinite;
+        transition: transform 2s ease-in-out;
+    }
+
+    .hero-slide {
+        width: 16.666%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    @keyframes slideShow {
+        0%, 14% { transform: translateX(0); }
+        17%, 31% { transform: translateX(-16.666%); }
+        34%, 48% { transform: translateX(-33.332%); }
+        51%, 65% { transform: translateX(-49.998%); }
+        68%, 82% { transform: translateX(-66.664%); }
+        85%, 99% { transform: translateX(-83.33%); }
+        100% { transform: translateX(0); }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .live-chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--fire-red);
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            padding: 5px;
+        }
+
+        .live-chat-btn:hover {
+            transform: scale(1.1);
+            background: var(--deep-green);
+        }
+
+        .live-chat-btn i {
+            font-size: 24px;
+            margin-bottom: 2px;
+        }
+
+        .live-chat-btn span.chat-label {
+            font-size: 10px;
+            font-weight: 500;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .chat-notification {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--deep-green);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .live-chat-btn {
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 20px;
+                padding: 0;
+            }
+            .live-chat-btn span.chat-label {
+                font-size: 9px;
+                display: none;
+            }
+        }
+
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            max-width: 80%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            cursor: move;
+            user-select: none;
+        }
+
+        .chat-header {
+            background: var(--fire-red);
+            color: white;
+            padding: 10px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+        }
+
+        .chat-body {
+            padding: 10px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            background: #f5f5f5;
+        }
+
+        .user-message {
+            margin-left: auto;
+            background: #028A0F;
+            color: white;
+        }
+
+        .bot-message {
+            margin-right: auto;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .chat-footer {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .submit-btn {
+            background: var(--fire-red);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--deep-green);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 2rem;
+        }
+
+        .nav-container ul {
+            margin-left: auto;
+            display: flex;
+            gap: 2rem;
+            padding-left: 2rem;
+        }
+
+        .search-container {
+            width: 400px;
+            position: relative;
+            margin: 0 2rem;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            padding-right: 2.5rem;
+            border: 2px solid var(--deep-green);
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .search-container button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--deep-green);
+            cursor: pointer;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        .search-results.active {
+            display: block;
+        }
+
+        .search-item {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .search-item:hover {
+            background: #f5f5f5;
+        }
+
+        .search-item.no-results {
+            color: #666;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .search-item.no-results a {
+            color: var(--fire-red);
+            text-decoration: none;
+        }
+
+        .search-item.no-results a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .nav-container ul {
+                margin: 1rem 0;
+                padding: 0;
+            }
+            .search-container {
+                max-width: none;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+    <meta name="description" content="FOREL International Restaurant - Experience our International Cuisine at its Finest">
+    <meta name="keywords" content="restaurant, international cuisine, Nigerian food, Asian fusion, European dishes">
+    <meta property="og:title" content="FOREL International Restaurant">
+    <meta property="og:description" content="Experience our International Cuisine at its Finest">
+    <meta property="og:image" content="assets/logo/forel-logo.png">
+</head>
+<body>
+    <div class="loading">
+        <img src="assets/logo/forel-logo.png" alt="Loading...">
+    </div>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="assets/logo/forel-logo.png" alt="FOREL Logo">
+                </div>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search for dishes...">
+                    <button onclick="handleSearch()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#cuisine-categories">Menu</a></li>
+                    <li><a href="#about-us">About Us</a></li>
+                    <li><a href="#footer">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-slider">
+                <div class="hero-slide" style="background-image: url('assets/background/hero-1.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('assets/background/hero-2.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('assets/background/hero-3.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('assets/background/hero-4.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('assets/background/hero-5.jpg')"></div>
+                <div class="hero-slide" style="background-image: url('assets/background/hero-6.jpg')"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-title">
+                    <span class="welcome-text">Welcome to</span>
+                    <span class="brand-name animate__animated animate__zoomInDown">FOREL</span>
+                    <span class="restaurant-type">International Restaurant</span>
+                </div>
+                <p>...experience our International Cuisine at it's Finest</p>
+                <button class="cta-button animate__animated animate__bounceInUp" onclick="openReservationModal()">Book a Reservation</button>
+            </div>
+        </section>
+
+        <section id="cuisine-categories">
+            <div class="cuisine-grid">
+                <a href="igbo-dishes.html" class="cuisine-box">
+                    <div class="cuisine-image">
+                        <img src="assets/cuisines/igbo.png" alt="Igbo Cuisine">
+                    </div>
+                    <div class="cuisine-content">
+                        <h3>IGBO DISHES</h3>
+                        <p>Traditional Eastern Nigerian delicacies</p>
+                    </div>
+                </a>
+                <a href="yoruba-dishes.html" class="cuisine-box">
+                    <div class="cuisine-image">
+                        <img src="assets/cuisines/yoruba.png" alt="Yoruba Cuisine">
+                    </div>
+                    <div class="cuisine-content">
+                        <h3>YORUBA DISHES</h3>
+                        <p>Authentic Western Nigerian flavors</p>
+                    </div>
+                </a>
+                <a href="hausa-dishes.html" class="cuisine-box">
+                    <div class="cuisine-image">
+                        <img src="assets/cuisines/hausa.png" alt="Hausa Cuisine">
+                    </div>
+                    <div class="cuisine-content">
+                        <h3>HAUSA DISHES</h3>
+                        <p>Northern Nigerian specialties</p>
+                    </div>
+                </a>
+                <a href="european-dishes.html" class="cuisine-box">
+                    <div class="cuisine-image">
+                        <img src="assets/cuisines/european.png" alt="European Cuisine">
+                    </div>
+                    <div class="cuisine-content">
+                        <h3>EUROPEAN DISHES</h3>
+                        <p>Classic Continental delights</p>
+                    </div>
+                </a>
+                <a href="chinese-dishes.html" class="cuisine-box">
+                    <div class="cuisine-image">
+                        <img src="assets/cuisines/chinese.png" alt="Chinese Cuisine">
+                    </div>
+                    <div class="cuisine-content">
+                        <h3>CHINESE DISHES</h3>
+                        <p>Authentic Asian flavors</p>
+                    </div>
+                </a>
+                <a href="korean-dishes.html" class="cuisine-box">
+                    <div class="cuisine-image">
+                        <img src="assets/cuisines/korean.png" alt="Korean Cuisine">
+                    </div>
+                    <div class="cuisine-content">
+                        <h3>KOREAN DISHES</h3>
+                        <p>Traditional Korean tastes</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section id="featured">
+            <div class="featured-container">
+                <h2>Our Specialties</h2>
+                <div class="cards">
+                    <div class="card">
+                        <img src="assets/featured/dish1.jpg" alt="Jollof Rice Special">
+                        <div class="card-content">
+                            <h3 class="dish-title">Nigerian Jollof Rice Special</h3>
+                            <p class="dish-description typing-animation">Aromatic long-grain rice cooked in rich tomato sauce with specially blended spices, served with grilled chicken and plantains</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="assets/featured/dish2.jpg" alt="Asian Fusion Bowl">
+                        <div class="card-content">
+                            <h3 class="dish-title">Asian-African Fusion Bowl</h3>
+                            <p class="dish-description typing-animation">Stir-fried noodles with suya spiced beef, Asian vegetables, and Nigerian pepper sauce</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img src="assets/featured/dish3.jpg" alt="Mediterranean Platter">
+                        <div class="card-content">
+                            <h3 class="dish-title">Mediterranean Seafood Platter</h3>
+                            <p class="dish-description typing-animation">Fresh grilled seafood with Mediterranean herbs, served with coconut rice and African spiced sauce</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="about-us" class="about-section">
+            <div class="about-container">
+                <div class="about-content">
+                    <h2>About Us</h2>
+                    <p class="about-text">At FOREL International Restaurant, we are pioneering a revolution in culinary excellence, bringing together diverse flavors from around the world under one roof. Established with a vision to bridge cultures through food, our journey began with a simple yet powerful idea: creating a space where traditional meets contemporary, where East meets West, and where Nigerian cuisine harmoniously blends with international flavors.</p>
+                    
+                    <p class="about-text">Our commitment goes beyond serving meals; we create memorable dining experiences. With master chefs from various cultural backgrounds, we craft each dish with passion, precision, and respect for authentic cooking traditions while embracing innovative culinary techniques.</p>
+
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h3>5,000+</h3>
+                            <p>Happy Customers</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>2018</h3>
+                            <p>Established</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3>30+</h3>
+                            <p>Expert Chefs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="contact-info">
+                <h3>Contact Us</h3>
+                <p>32 Kumasi Cresent Asaba</p>
+                <p>Delta, Nigeria.</p>
+                <p>Phone: +234 901 234 5678</p>
+                <p>Email: info@forelintrestaurant.com</p>
+            </div>
+            <div class="opening-hours">
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 7:00am - 11:00pm</p>
+                <p>Saturday - Sunday: 10:00am - 11:30pm</p>
+            </div>
+            <div class="social-media">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.tiktok.com/@forel_int_restaurant" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    <a href="https://www.facebook.com/forel_int_restaurant" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="https://www.instagram.com/forel_int_restaurant" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://x.com/forel_int_restaurant" target="_blank" rel="noopener noreferrer">
+                        <i class="fa-brands fa-x-twitter"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-image"></div>
+            <p>&copy; 2024 FOREL International Restaurant. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Reservation Modal -->
+    <div id="reservationModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeReservationModal()">&times;</span>
+            <h2>Make a Reservation</h2>
+            <form id="reservationForm" onsubmit="handleReservation(event)">
+                <div class="form-group">
+                    <label for="name">Full Name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time:</label>
+                        <input type="time" id="time" name="time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Number of Guests:</label>
+                    <select id="guests" name="guests" required>
+                        <option value="">Select number of guests</option>
+                        <option value="1">1 Person</option>
+                        <option value="2">2 People</option>
+                        <option value="3">3 People</option>
+                        <option value="4">4 People</option>
+                        <option value="5">5 People</option>
+                        <option value="6">6 People</option>
+                        <option value="7+">7 or more</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="special-requests">Special Requests:</label>
+                    <textarea id="special-requests" name="special-requests" rows="3"></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Confirm Reservation</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="live-chat-btn" onclick="toggleChat()">
+        <i class="fas fa-comments"></i>
+        <span class="chat-label">Live Chat</span>
+        <span class="chat-notification">1</span>
+    </div>
+
+    <div class="chat-window">
+        <div class="chat-header">
+            <h3>Live Chat</h3>
+            <button onclick="toggleChat()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chat-body">
+            <div class="chat-message">
+                <span>Hello! Welcome to FOREL International Restaurant. How can we help you today?</span>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" class="chat-input" placeholder="Type your message...">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="assets/js/chat.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            document.querySelector('.loading').style.display = 'none';
+        });
+
+        function openLiveChat() {
+            // You can integrate your preferred live chat service here
+            alert('Live chat feature coming soon!');
+        }
+
+        function toggleChat() {
+            const chatWindow = document.querySelector('.chat-window');
+            chatWindow.style.display = chatWindow.style.display === 'none' || chatWindow.style.display === '' ? 'flex' : 'none';
+        }
+
+        function sendMessage() {
+            const input = document.querySelector('.chat-input');
+            const message = input.value.trim();
+            if (message) {
+                const chatBody = document.querySelector('.chat-body');
+                const newMessage = document.createElement('div');
+                newMessage.classList.add('chat-message', 'user-message');
+                newMessage.innerHTML = `<span>${message}</span>`;
+                chatBody.appendChild(newMessage);
+                input.value = '';
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const botResponse = document.createElement('div');
+                    botResponse.classList.add('chat-message', 'bot-message');
+                    botResponse.innerHTML = `<span>Thank you for your message. Our team will assist you shortly.</span>`;
+                    chatBody.appendChild(botResponse);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+                
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        }
+
+        // Add draggable functionality
+    function makeDraggable(element) {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        element.querySelector('.chat-header').onmousedown = dragMouseDown;
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position
+            let newTop = element.offsetTop - pos2;
+            let newLeft = element.offsetLeft - pos1;
+            
+            // Keep window within viewport bounds
+            const maxX = window.innerWidth - element.offsetWidth;
+            const maxY = window.innerHeight - element.offsetHeight;
+            
+            newTop = Math.min(Math.max(0, newTop), maxY);
+            newLeft = Math.min(Math.max(0, newLeft), maxX);
+            
+            element.style.top = newTop + "px";
+            element.style.left = newLeft + "px";
+        }
+
+        function closeDragElement() {
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+
+    // Initialize draggable chat window
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatWindow = document.querySelector('.chat-window');
+        makeDraggable(chatWindow);
+    });
+
+    const dishes = [
+        // Nigerian Dishes
+        { name: 'Jollof Rice Special', category: 'Nigerian', url: '#featured' },
+        { name: 'Egusi Soup', category: 'Igbo', url: 'igbo-dishes.html#egusi' },
+        { name: 'Amala and Ewedu', category: 'Yoruba', url: 'yoruba-dishes.html#amala' },
+        { name: 'Oha Soup', category: 'Igbo', url: 'igbo-dishes.html#oha' },
+        { name: 'Tuwo Shinkafa', category: 'Hausa', url: 'hausa-dishes.html#tuwo' },
+        { name: 'Suya', category: 'Hausa', url: 'hausa-dishes.html#suya' },
+        // European Dishes
+        { name: 'Beef Wellington', category: 'European', url: 'european-dishes.html#wellington' },
+        { name: 'Pasta Carbonara', category: 'European', url: 'european-dishes.html#carbonara' },
+        // Chinese Dishes
+        { name: 'Kung Pao Chicken', category: 'Chinese', url: 'chinese-dishes.html#kungpao' },
+        { name: 'Dim Sum', category: 'Chinese', url: 'chinese-dishes.html#dimsum' },
+        // Korean Dishes
+        { name: 'Bibimbap', category: 'Korean', url: 'korean-dishes.html#bibimbap' },
+        { name: 'Kimchi', category: 'Korean', url: 'korean-dishes.html#kimchi' }
+    ];
+
+    function handleSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const query = searchInput.value.toLowerCase().trim();
+
+        if (query.length < 2) {
+            searchResults.classList.remove('active');
+            return;
+        }
+
+        const filtered = dishes.filter(dish => 
+            dish.name.toLowerCase().includes(query) || 
+            dish.category.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+            searchResults.innerHTML = `
+                <div class="search-item no-results">
+                    <div>Sorry, we currently don't have that dish.</div>
+                    <small>Kindly place a request by <a href="#contact">contacting us</a></small>
+                </div>
+            `;
+        } else {
+            searchResults.innerHTML = filtered.map(dish => `
+                <div class="search-item" onclick="window.location.href='${dish.url}'">
+                    <div>${dish.name}</div>
+                    <small>${dish.category} Cuisine</small>
+                </div>
+            `).join('');
+        }
+
+        searchResults.classList.add('active');
+    }
+
+    document.getElementById('searchInput').addEventListener('keyup', handleSearch);
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-container')) {
+            document.getElementById('searchResults').classList.remove('active');
+        }
+    });
+    document.getElementById('searchInput').addEventListener('blur', function() {
+        setTimeout(() => {
+            this.value = '';
+            document.getElementById('searchResults').classList.remove('active');
+        }, 200);
+    });
+    </script>
+</body>
+</html>
